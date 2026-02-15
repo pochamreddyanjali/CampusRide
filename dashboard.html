@@ -24,7 +24,6 @@ body::before {
     z-index: -2;
 }
 
-
 /* ===== NAVBAR ===== */
 .navbar {
     background-color: #1e3a8a;
@@ -80,29 +79,27 @@ body::before {
     padding: 60px 150px;
 }
 
-/* LEFT */
-.left-column {
+.left-column,
+.right-column {
     display: flex;
     flex-direction: column;
     gap: 40px;
+}
+
+.left-column {
     align-items: flex-end;
 }
 
-/* CENTER */
+.right-column {
+    align-items: flex-start;
+}
+
 .center-stats {
     display: flex;
     flex-direction: column;
     gap: 40px;
     align-items: center;
     margin-top: 90px;
-}
-
-/* RIGHT */
-.right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    align-items: flex-start;
 }
 
 /* ===== CARD BASE ===== */
@@ -117,8 +114,9 @@ body::before {
     z-index: 1;
 }
 
-/* ===== BLUE BORDER (MODULE CARDS) ===== */
-.card::before {
+/* ===== ANIMATED BORDER ===== */
+.card::before,
+.stat-card::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -126,7 +124,7 @@ body::before {
     border-radius: 35px;
     background: linear-gradient(45deg, #60a5fa, #1e3a8a, #60a5fa);
     background-size: 300% 300%;
-    animation: blueBorder 5s linear infinite;
+    animation: borderAnimation 5s linear infinite;
 
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
@@ -137,33 +135,7 @@ body::before {
     z-index: -1;
 }
 
-/* ===== RED BORDER (STAT CARDS) ===== */
-.stat-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    padding: 4px;
-    border-radius: 35px;
-    background: linear-gradient(45deg, #60a5fa, #1e3a8a,  #60a5fa);
-    background-size: 300% 300%;
-    animation: redBorder 5s linear infinite;
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-
-    z-index: -1;
-}
-
-@keyframes blueBorder {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes redBorder {
+@keyframes borderAnimation {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
@@ -182,16 +154,6 @@ body::before {
     color: #6c757d;
 }
 
-.card button {
-    padding: 12px 26px;
-    border-radius: 25px;
-    border: none;
-    background-color: #1e3a8a;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-}
-
 .stat-card h2 {
     font-size: 36px;
     margin-bottom: 10px;
@@ -201,6 +163,22 @@ body::before {
 .stat-card p {
     font-size: 16px;
     color: #555;
+}
+
+/* ===== BUTTON STYLE ===== */
+.btn {
+    display: inline-block;
+    padding: 12px 26px;
+    border-radius: 25px;
+    background-color: #1e3a8a;
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: #163174;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -245,20 +223,22 @@ body::before {
 
 <section class="dashboard-grid">
 
+    <!-- LEFT -->
     <div class="left-column">
         <div class="card">
             <h3>Vehicle Registration</h3>
             <p>Register your vehicle to start offering rides.</p>
-            <button>Register Vehicle</button>
+            <a href="registervehicle.html" class="btn">Register Vehicle</a>
         </div>
 
         <div class="card">
             <h3>Offer Ride</h3>
             <p>Create a ride and share your journey.</p>
-            <button>Offer Ride</button>
+            <a href="#" class="btn">Offer Ride</a>
         </div>
     </div>
 
+    <!-- CENTER -->
     <div class="center-stats">
         <div class="stat-card">
             <h2>12</h2>
@@ -271,17 +251,18 @@ body::before {
         </div>
     </div>
 
+    <!-- RIGHT -->
     <div class="right-column">
         <div class="card">
             <h3>Request Ride</h3>
             <p>Search and join available rides.</p>
-            <button>Request Ride</button>
+            <a href="#" class="btn">Request Ride</a>
         </div>
 
         <div class="card">
             <h3>Registration Status</h3>
             <p>Track your vehicle approval and ride history.</p>
-            <button>View Status</button>
+            <a href="#" class="btn">View Status</a>
         </div>
     </div>
 
@@ -289,3 +270,4 @@ body::before {
 
 </body>
 </html>
+ 

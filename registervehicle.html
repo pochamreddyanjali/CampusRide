@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CampusRide - Register Vehicle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* ===== GLOBAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ===== BACKGROUND IMAGE ===== */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: 
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url("images/register.png") no-repeat center center/cover;
+    z-index: -1;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* ===== TITLE SECTION ===== */
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.page-title {
+    font-size: 52px;  /* Bigger text */
+    font-weight: bold;
+    animation: colorChange 4s infinite alternate;
+}
+
+/* Animated color change */
+@keyframes colorChange {
+    0%   { color: #87CEFA; }  /* Light Blue */
+    50%  { color: #ffb6c1; }  /* Light Pink */
+    100% { color: #ff7f7f; }  /* Light Red */
+}
+
+.icon {
+    font-size: 70px;   /* Bigger icons */
+}
+
+/* ===== GLASS FORM CONTAINER ===== */
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    width: 750px;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ===== FORM GRID ===== */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px 30px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* ===== LABEL ===== */
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: white;
+}
+
+/* ===== INPUT ===== */
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.2);
+    color: white;
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #eee;
+}
+
+select option {
+    color: black;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 8px rgba(96,165,250,0.7);
+}
+
+input[type="file"] {
+    background: transparent;
+}
+
+/* ===== BUTTON ===== */
+button {
+    grid-column: span 2;
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(45deg, #60a5fa, #1e3a8a);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.4s;
+    margin-top: 10px;
+}
+
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(96,165,250,0.8);
+}
+
+.note {
+    font-size: 12px;
+    color: #f1f1f1;
+    margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    button {
+        grid-column: span 1;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== TITLE WITH ICONS ===== -->
+<div class="title-container">
+    <span class="icon">🚗</span>
+    <h1 class="page-title">Register Vehicle</h1>
+    <span class="icon">🏍️</span>
+</div>
+
+<!-- ===== FORM ===== -->
+<div class="container">
+    <form>
+
+        <div>
+            <label>Name</label>
+            <input type="text" required>
+        </div>
+
+        <div>
+            <label>Email (College Email Only)</label>
+            <input type="email" placeholder="example@college.edu" required>
+        </div>
+
+        <div>
+            <label>Mobile Number</label>
+            <input type="tel" required>
+        </div>
+
+        <div>
+            <label>Gender</label>
+            <select required>
+                <option value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="full-width">
+            <label>College ID</label>
+            <input type="file" required>
+            <div class="note">Upload clear image of your college ID</div>
+        </div>
+
+        <div class="full-width">
+            <label>Driving License</label>
+            <input type="file" required>
+        </div>
+
+        <div class="full-width">
+            <label>R.C (Registration Certificate)</label>
+            <input type="file" required>
+        </div>
+
+        <div>
+            <label>Vehicle Model</label>
+            <input type="text" required>
+        </div>
+
+        <div>
+            <label>Vehicle Number</label>
+            <input type="text" placeholder="AP09AB1234" required>
+        </div>
+
+        <button type="submit">Submit for Approval</button>
+
+    </form>
+</div>
+
+</body>
+</html>
