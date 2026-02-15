@@ -179,26 +179,26 @@ button:hover {
 
 <!-- ===== FORM ===== -->
 <div class="container">
-    <form>
+    <form id="vehicleForm">
 
         <div>
             <label>Name</label>
-            <input type="text" required>
+            <input type="text" name="name" placeholder="John" required>
         </div>
 
         <div>
             <label>Email (College Email Only)</label>
-            <input type="email" placeholder="example@college.edu" required>
+            <input type="email" name="email" placeholder="example@college.edu" required>
         </div>
 
         <div>
             <label>Mobile Number</label>
-            <input type="tel" required>
+            <input type="tel" name="mobile" placeholder="9876543210" equired>
         </div>
 
         <div>
             <label>Gender</label>
-            <select required>
+            <select name="gender" required>
                 <option value="">Select</option>
                 <option>Male</option>
                 <option>Female</option>
@@ -208,34 +208,54 @@ button:hover {
 
         <div class="full-width">
             <label>College ID</label>
-            <input type="file" required>
+            <input type="file" name="collegeId" required>
             <div class="note">Upload clear image of your college ID</div>
         </div>
 
         <div class="full-width">
             <label>Driving License</label>
-            <input type="file" required>
+            <input type="file" name="license" required>
         </div>
 
         <div class="full-width">
             <label>R.C (Registration Certificate)</label>
-            <input type="file" required>
+            <input type="file" name="rc" required>
         </div>
 
         <div>
             <label>Vehicle Model</label>
-            <input type="text" required>
+            <input type="text" name="vehicleModel" placeholder="Splender Plus" required>
         </div>
 
         <div>
             <label>Vehicle Number</label>
-            <input type="text" placeholder="AP09AB1234" required>
+            <input type="text" name="vehicleNumber" placeholder="AP09AB1234" required>
         </div>
 
         <button type="submit">Submit for Approval</button>
 
     </form>
 </div>
+<script>
+document.getElementById("vehicleForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const response = await fetch("http://localhost:8081/api/vehicle/register", {
+        method: "POST",
+        body: formData
+    });
+
+    if(response.ok){
+        alert("Vehicle submitted for approval!");
+        this.reset();
+    } else {
+        alert("Submission failed");
+    }
+});
+</script>
+
 
 </body>
 </html>
