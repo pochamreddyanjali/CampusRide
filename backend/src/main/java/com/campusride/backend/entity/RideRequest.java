@@ -10,8 +10,13 @@ public class RideRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "ride_id")
     private Long rideId;
+
+    @Column(name = "passenger_email")
     private String passengerEmail;
+
+    @Column(name = "status")
     private String status = "PENDING";
 
     public Long getId() {

@@ -1,13 +1,16 @@
 package com.campusride.backend.service;
 
-import com.campusride.backend.entity.Ride;
 import com.campusride.backend.dto.RideRequestDTO;
-import com.campusride.backend.entity.Vehicle;
+import com.campusride.backend.entity.Ride;
+import com.campusride.backend.entity.User;
 import com.campusride.backend.repository.RideRepository;
-import com.campusride.backend.repository.VehicleRepository;
+import com.campusride.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,44 +21,38 @@ public class RideService {
     private RideRepository rideRepository;
 
     @Autowired
-    private VehicleService vehicleService;
+    private UserRepository userRepository;
 
-    @Autowired
-    private VehicleRepository vehicleRepository;
-
-    // Create ride
+    // Create Ride
     public Ride createRide(Ride ride) {
-        Vehicle vehicle = vehicleService
-                .getApprovedVehicleByEmail(ride.getDriverEmail());
-
-        if (vehicle != null) {
-            ride.setVehicleNumber(vehicle.getVehicleNumber());
-        }
-
+        ride.setStatus("ACTIVE");
         return rideRepository.save(ride);
     }
 
-    // Get all rides with driver details
+    // Get All Available Rides (Today + Future Only)
     public List<RideRequestDTO> getAllRideDetails() {
 
-        List<Ride> rides = rideRepository.findAll();
+        String today = LocalDate.now().toString();
+
+        String currentTime = LocalTime.now()
+                .format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        List<Ride> rides = rideRepository.findAvailableRides(today, currentTime);
         List<RideRequestDTO> list = new ArrayList<>();
 
         for (Ride ride : rides) {
 
-            String name = "Unknown";
-            String mobile = "Not Available";
+            String driverName = "";
+            String driverMobile = "";
 
-            if (ride.getVehicleNumber() != null) {
+            if (ride.getDriverEmail() != null) {
+                User driver = userRepository
+                        .findByEmail(ride.getDriverEmail())
+                        .orElse(null);
 
-                List<Vehicle> vehicles =
-                        vehicleRepository.findByVehicleNumber(ride.getVehicleNumber());
-
-                Vehicle vehicle = vehicles.isEmpty() ? null : vehicles.get(0);
-
-                if (vehicle != null) {
-                    name = vehicle.getName();
-                    mobile = vehicle.getMobile();
+                if (driver != null) {
+                    driverName = driver.getFullName();
+                    driverMobile = driver.getPhone();
                 }
             }
 
@@ -67,13 +64,31 @@ public class RideService {
                     ride.getRideTime(),
                     ride.getSeatsAvailable(),
                     ride.getVehicleNumber(),
-                    name,
-                    mobile
+                    driverName,
+                    driverMobile,
+                    ride.getStatus()
             );
 
             list.add(dto);
         }
 
         return list;
+    }
+
+    // Get rides created by driver
+    public List<Ride> getDriverRides(String email) {
+        return rideRepository.findByDriverEmail(email);
+    }
+
+    // Cancel Ride
+    public Ride cancelRide(Long rideId) {
+        Ride ride = rideRepository.findById(rideId).orElse(null);
+
+        if (ride != null) {
+            ride.setStatus("CANCELLED");
+            return rideRepository.save(ride);
+        }
+
+        return null;
     }
 }

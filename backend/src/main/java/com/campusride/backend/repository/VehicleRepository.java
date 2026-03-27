@@ -10,10 +10,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     List<Vehicle> findByStatus(String status);
 
+    List<Vehicle> findByEmail(String email);
+
     List<Vehicle> findByEmailAndStatus(String email, String status);
 
-    List<Vehicle> findByVehicleNumber(String vehicleNumber);
-
-    // ADD THIS METHOD
-    List<Vehicle> findByEmail(String email);
+    Optional<Vehicle> findByVehicleNumber(String vehicleNumber);
 }

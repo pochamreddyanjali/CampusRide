@@ -13,46 +13,37 @@
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* Background Image */
 body {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-
     background:
         linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
         url("images/offerride.png") no-repeat center center/cover;
 }
 
-/* Glass Effect Form */
 .container {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
     padding: 35px;
     border-radius: 15px;
     width: 420px;
-
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     border: 1px solid rgba(255,255,255,0.3);
 }
 
-/* Title */
 h2 {
     text-align: center;
     margin-bottom: 20px;
     color: white;
 }
 
-/* Labels */
 label {
     color: white;
     font-weight: bold;
 }
 
-/* Inputs */
 input {
     width: 100%;
     padding: 10px;
@@ -63,11 +54,6 @@ input {
     color: white;
 }
 
-input::placeholder {
-    color: #eee;
-}
-
-/* Button */
 button {
     width: 100%;
     padding: 12px;
@@ -77,24 +63,18 @@ button {
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 button:hover {
     background: #163174;
 }
 
-/* Back Link */
 .back {
     display: block;
     margin-top: 15px;
     text-align: center;
     color: #ddd;
     text-decoration: none;
-}
-
-.back:hover {
-    color: white;
 }
 </style>
 </head>
@@ -106,10 +86,10 @@ button:hover {
 
     <form id="rideForm">
         <label>Source</label>
-        <input type="text" id="source" placeholder="Enter source" required>
+        <input type="text" id="source" required>
 
         <label>Destination</label>
-        <input type="text" id="destination" placeholder="Enter destination" required>
+        <input type="text" id="destination" required>
 
         <label>Date</label>
         <input type="date" id="rideDate" required>
@@ -118,7 +98,8 @@ button:hover {
         <input type="time" id="rideTime" required>
 
         <label>Seats Available</label>
-        <input type="number" id="seats" placeholder="Number of seats" required>
+        <input type="number" id="seats" required>
+
 
         <button type="submit">Offer Ride</button>
     </form>
@@ -159,7 +140,7 @@ document.getElementById("rideForm").addEventListener("submit", async function(e)
         alert("Ride offered successfully!");
         window.location.href = "dashboard.html";
     } else {
-        alert("Error offering ride. Make sure your vehicle is approved.");
+        alert("Error offering ride.");
     }
 });
 </script>

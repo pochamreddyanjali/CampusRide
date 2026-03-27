@@ -1,5 +1,6 @@
 package com.campusride.backend.controller;
 
+import com.campusride.backend.dto.RideRequestDTO;
 import com.campusride.backend.entity.RideRequest;
 import com.campusride.backend.service.RideRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ride-request")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class RideRequestController {
 
     @Autowired
@@ -22,7 +23,7 @@ public class RideRequestController {
     }
 
     @GetMapping("/passenger")
-    public List<RideRequest> getPassengerRequests(@RequestParam String email) {
+    public List<RideRequestDTO> getPassengerRequests(@RequestParam String email) {
         return rideRequestService.getPassengerRequests(email);
     }
 

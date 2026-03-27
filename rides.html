@@ -11,7 +11,6 @@ body {
     min-height: 100vh;
 }
 
-/* Tabs */
 .tab-header {
     display: flex;
     width: 100%;
@@ -31,7 +30,6 @@ body {
     background: rgba(0, 0, 0, 0.5);
 }
 
-/* Glass container */
 .container {
     width: 80%;
     margin: 30px auto;
@@ -42,7 +40,6 @@ body {
     color: white;
 }
 
-/* Content */
 .tab-content {
     display: none;
 }
@@ -51,7 +48,6 @@ body {
     display: block;
 }
 
-/* Cards */
 .card {
     background: rgba(255, 255, 255, 0.9);
     padding: 12px;
@@ -60,7 +56,6 @@ body {
     color: black;
 }
 
-/* Buttons */
 button {
     padding: 6px 12px;
     background: #1e3a8a;
@@ -74,7 +69,6 @@ button:hover {
     background: #162d6b;
 }
 
-/* Inputs */
 input {
     padding: 8px;
     margin: 5px;
@@ -86,7 +80,6 @@ input {
 </head>
 <body>
 
-<!-- Tabs -->
 <div class="tab-header">
     <div class="tab active" onclick="openTab('requestTab', this)">
         Request Ride
@@ -98,7 +91,7 @@ input {
 
 <div class="container">
 
-    <!-- Tab 1 -->
+    <!-- Available Rides -->
     <div id="requestTab" class="tab-content active">
         <h2>Available Rides</h2>
 
@@ -109,7 +102,7 @@ input {
         <div id="ridesContainer"></div>
     </div>
 
-    <!-- Tab 2 -->
+    <!-- My Requests -->
     <div id="myTab" class="tab-content">
         <h2>My Ride Requests</h2>
         <div id="myRequests"></div>
@@ -118,6 +111,7 @@ input {
 </div>
 
 <script>
+
 // Switch Tabs
 function openTab(tabId, element) {
     document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
@@ -131,20 +125,19 @@ function openTab(tabId, element) {
     }
 }
 
-// Load all rides
+// Load Available Rides
 async function loadRides() {
-    const res = await fetch("http://localhost:8081/api/rides/all");
+    const res = await fetch("http://localhost:8081/api/rides");
     const rides = await res.json();
-    console.log('rides response:',rides);
     displayRides(rides);
 }
 
-// Search rides
+// Search Rides
 async function searchRides() {
     const source = document.getElementById("source").value.toLowerCase();
     const destination = document.getElementById("destination").value.toLowerCase();
 
-    const res = await fetch("http://localhost:8081/api/rides/all");
+    const res = await fetch("http://localhost:8081/api/rides");
     const rides = await res.json();
 
     const filtered = rides.filter(r =>
@@ -155,14 +148,9 @@ async function searchRides() {
     displayRides(filtered);
 }
 
-// Display rides
+// Display Rides
 function displayRides(rides) {
     let html = "";
-
-    if (!Array.isArray(rides)) {
-        console.log("Backend error:", rides);
-        return;
-    }
 
     rides.forEach(r => {
         html += `
@@ -174,7 +162,7 @@ function displayRides(rides) {
                 <p>Vehicle: ${r.vehicleNumber}</p>
                 <p><b>Driver:</b> ${r.driverName}</p>
                 <p><b>Contact:</b> ${r.driverMobile}</p>
-                <button onclick="requestRide(${r.id}, this)">Request Ride</button>
+                <button onclick="requestRide(${r.rideId}, this)">Request Ride</button>
             </div>
         `;
     });
@@ -182,7 +170,7 @@ function displayRides(rides) {
     document.getElementById("ridesContainer").innerHTML = html;
 }
 
-// Request ride
+// Request Ride
 async function requestRide(rideId, btn) {
     const email = localStorage.getItem("email");
 
@@ -198,7 +186,7 @@ async function requestRide(rideId, btn) {
     loadMyRequests();
 }
 
-// Load my requests
+// Load My Requests
 async function loadMyRequests() {
     const email = localStorage.getItem("email");
 
@@ -218,8 +206,15 @@ async function loadMyRequests() {
 
         html += `
             <div class="card">
-                <p>Ride ID: ${r.rideId}</p>
+                <h3>${r.source} → ${r.destination}</h3>
+                <p>Date: ${r.rideDate}</p>
+                <p>Time: ${r.rideTime}</p>
+                <p>Seats: ${r.seatsAvailable}</p>
+                <p>Vehicle: ${r.vehicleNumber}</p>
+                <p><b>Driver:</b> ${r.driverName}</p>
+                <p><b>Contact:</b> ${r.driverMobile}</p>
                 <p>Status: <b style="color:${color}">${r.status}</b></p>
+                <p>Ride ID: ${r.rideId}</p>
             </div>
         `;
     });
@@ -227,8 +222,9 @@ async function loadMyRequests() {
     document.getElementById("myRequests").innerHTML = html;
 }
 
-// Initial load
+// Initial Load
 loadRides();
+
 </script>
 
 </body>
