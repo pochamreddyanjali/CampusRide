@@ -20,6 +20,9 @@ public class DashboardService {
 
     @Autowired
     private RideRepository rideRepo;
+    
+    @Autowired
+    private RideRequestRepository rideRequestRepo;
 
     public DashboardResponse getDashboard(String email) {
 
@@ -56,7 +59,19 @@ public class DashboardService {
                 }).toList();
 
         // 4. Rides used (not implemented yet)
-        res.ridesUsed = List.of();
+        res.ridesUsed = rideRequestRepo.findByPassengerEmail(email)
+        			.stream()
+        			.map(r -> {
+        				Ride ride = rideRepo.findById(r.getRideId())
+        	                    .orElseThrow(() -> new RuntimeException("Ride not found"));
+
+        	            RideDTO dto = new RideDTO();
+        	            dto.pickup = ride.getSource();
+        	            dto.destination = ride.getDestination();
+        	            dto.time = ride.getRideDate() + " " + ride.getRideTime();
+
+        	            return dto;
+        	        }).toList();
 
         return res;
     }

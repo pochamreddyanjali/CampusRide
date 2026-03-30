@@ -154,6 +154,12 @@
     </div>
 
     <script>
+      const role = localStorage.getItem("role");
+
+      if (!role) {
+        alert("Login required");
+        window.location.href = "login.html";
+      }
       function logout() {
         localStorage.clear();
 

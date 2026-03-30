@@ -223,14 +223,9 @@
       <div class="logo">CampusRide</div>
       <nav>
         <ul>
-          <li><a href="#" class="active">Home</a></li>
+          <li><a href="dashboard.html">Home</a></li>
           <li><a href="profile.html">Profile</a></li>
-          <li>
-            <button
-              id="authBtn"
-              onclick="handleAuth()"
-            ></button>
-          </li>
+          <li><button onclick="logout()">Logout</button></li>
         </ul>
       </nav>
     </header>
@@ -286,65 +281,32 @@
     </section>
   </body>
   <script>
+    const role = localStorage.getItem("role");
+
+    if (!role) {
+      alert("Login required");
+      window.location.href = "login.html";
+    }
+    function logout() {
+      localStorage.clear();
+
+      window.location.href = "login.html";
+    }
+
     function goToVehicle() {
-      if (!checkAuth()) return;
       window.location.href = "registervehicle.html";
     }
 
     function goToOfferRide() {
-      if (!checkAuth()) return;
       window.location.href = "offerride.html";
     }
 
     function goToRequestRide() {
-      if (!checkAuth()) return;
       window.location.href = "rides.html";
     }
 
     function goToViewStatus() {
-      if (!checkAuth()) return;
       window.location.href = "viewstatus.html";
     }
-
-    function checkAuth() {
-      const role = localStorage.getItem("role");
-      if (!role) {
-        alert("Login required");
-        window.location.href = "login.html";
-        return false;
-      }
-      return true;
-    }
-
-    function updateAuthButton() {
-      const role = localStorage.getItem("role");
-      const btn = document.getElementById("authBtn");
-
-      if (role) {
-        btn.innerText = "Logout";
-      } else {
-        btn.innerText = "Login";
-      }
-    }
-
-    function handleAuth() {
-      const role = localStorage.getItem("role");
-
-      if (role) {
-        // Logout
-        localStorage.removeItem("email");
-        localStorage.removeItem("role");
-
-        alert("Logged out successfully");
-
-        updateAuthButton();
-      } else {
-        // Go to login
-        window.location.href = "login.html";
-      }
-    }
-
-    // Run on page load
-    updateAuthButton();
   </script>
 </html>
