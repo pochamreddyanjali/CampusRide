@@ -18,7 +18,7 @@ public class UserService {
     public User registerUser(User user) {
     	
     		if(userRepository.findByEmail(user.getEmail()).isPresent()){
-            throw new RuntimeException("Email already registered");
+            throw new RuntimeException("Email already in use.");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
@@ -40,5 +40,9 @@ public class UserService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    
+    public long getUsers() {
+    		return userRepository.count();
     }
 }

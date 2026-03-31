@@ -196,15 +196,32 @@
         <input type="tel" name="mobile" placeholder="Mobile" required />
 
         <select name="gender">
-          <option>--Select--</option>
+          <option>--Gender--</option>
           <option>Male</option>
           <option>Female</option>
           <option>Other</option>
         </select>
-        
-        <input type="file" name="collegeId" class="full-width" required />
-        <input type="file" name="license" class="full-width" required />
-        <input type="file" name="rc" class="full-width" required />
+
+        <div class="full-width">
+          <label class="file-upload">
+            Upload College ID
+            <input type="file" name="collegeId" required />
+          </label>
+        </div>
+
+        <div class="full-width">
+          <label class="file-upload">
+            Upload Driving License
+            <input type="file" name="license" required />
+          </label>
+        </div>
+
+        <div class="full-width">
+          <label class="file-upload">
+            Upload RC Document
+            <input type="file" name="rc" required />
+          </label>
+        </div>
 
         <input
           type="text"
@@ -244,15 +261,19 @@
               body: formData,
             },
           );
-
-          if (response.ok) {
-            alert("Submitted for approval! " + response.statusText);
-          } else {
-            alert(
-              "Submission Failed!. Check for reason here: " +
-                response.statusText,
-            );
+          const email = localStorage.getItem("email");
+          if (email !== formData.get("email")) {
+            alert("Email must match the logged in user!");
+            return;
           }
+
+          const text = await response.text();
+          if (!response.ok) {
+            alert("Registration failed: " + text);
+            return;
+          }
+          alert(text);
+          window.location.href = "dashboard.html";
         });
 
       function logout() {

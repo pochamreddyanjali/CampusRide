@@ -254,13 +254,13 @@
       <!-- CENTER -->
       <div class="center-stats">
         <div class="stat-card">
-          <h2>12</h2>
+          <h2 id="activerides">0</h2>
           <p>Active Rides</p>
         </div>
 
         <div class="stat-card">
-          <h2>34</h2>
-          <p>Registered Vehicles</p>
+          <h2 id="activeusers">0</h2>
+          <p>Active Users</p>
         </div>
       </div>
 
@@ -273,14 +273,25 @@
         </div>
 
         <div class="card">
-          <h3>Registration Status</h3>
-          <p>Track your vehicle approval and ride history.</p>
-          <button onclick="goToViewStatus()">View Status</button>
+          <h3>Ride Requests Management</h3>
+          <p>Approve or reject passengers requesting your rides.</p>
+          <button onclick="goToDriverRequests()">View Requests</button>
         </div>
       </div>
     </section>
   </body>
   <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const res = await fetch("http://localhost:8081/api/rides");
+      document.getElementById("activerides").innerText = res.ok
+        ? (await res.json()).length
+        : "N/A";
+      const res2 = await fetch("http://localhost:8081/api/auth");
+      document.getElementById("activeusers").innerText = res.ok
+        ? (await res2.json())
+        : "N/A";
+    });
+
     const role = localStorage.getItem("role");
 
     if (!role) {
@@ -305,8 +316,8 @@
       window.location.href = "rides.html";
     }
 
-    function goToViewStatus() {
-      window.location.href = "viewstatus.html";
+    function goToDriverRequests() {
+      window.location.href = "driver-requests.html";
     }
   </script>
 </html>

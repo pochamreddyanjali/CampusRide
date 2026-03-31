@@ -24,5 +24,10 @@ public class AuthController {
     public User login(@RequestBody LoginRequest request) {
         return userService.loginUser(request.getEmail(), request.getPassword());
     }
+    
+    @GetMapping
+    public long usersCount() {
+    		return userService.getUsers();
+    }
 
 }

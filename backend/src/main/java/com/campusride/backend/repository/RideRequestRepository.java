@@ -8,4 +8,7 @@ import java.util.List;
 public interface RideRequestRepository extends JpaRepository<RideRequest, Long> {
 
     List<RideRequest> findByPassengerEmail(String passengerEmail);
+    
+    List<RideRequest> findByRideIdAndStatus(Long rideId, String status);
+    
 }

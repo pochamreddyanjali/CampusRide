@@ -1,0 +1,243 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Driver Requests - CampusRide</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+      
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f4f6f9;
+      }
+
+      /* ===== NAVBAR ===== */
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: #1e3a8a;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 80px;
+        z-index: 1000;
+      }
+
+      .logo {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .navbar ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+      }
+
+      .navbar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      .navbar button {
+        background-color: white;
+        color: #1e3a8a;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      /* ===== BUTTON STYLE ===== */
+      button {
+        display: inline-block;
+        padding: 12px 26px;
+        border-radius: 25px;
+        background-color: #1e3a8a;
+        color: white;
+        font-size: 15px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #163174;
+      }
+
+      /* TITLE */
+      .title {
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      /* GRID */
+      .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 25px;
+        padding: 0 40px 40px;
+      }
+
+      /* CARD */
+      .card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card h3 {
+        color: #1e3a8a;
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        margin: 6px 0;
+        color: #444;
+      }
+
+      /* BUTTONS */
+      .btn {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .approve {
+        background: green;
+        color: white;
+      }
+
+      .reject {
+        background: red;
+        color: white;
+        margin-left: 10px;
+      }
+
+      /* EMPTY STATE */
+      .empty {
+        text-align: center;
+        color: gray;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ✅ FULL WIDTH NAVBAR -->
+    <header class="navbar">
+      <div class="logo">CampusRide</div>
+      <ul>
+        <li><a href="dashboard.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><button onclick="logout()">Logout</button></li>
+      </ul>
+    </header>
+
+    <!-- TITLE -->
+    <div class="title">
+      <h2>Pending Ride Requests</h2>
+    </div>
+
+    <!-- REQUEST LIST -->
+    <div id="requestList" class="container"></div>
+
+    <script>
+      const email = localStorage.getItem("email");
+
+      // Auth check
+      if (!email) {
+        alert("Login required");
+        window.location.href = "login.html";
+      }
+
+      // Load requests
+      async function loadRequests() {
+        const response = await fetch(
+          `http://localhost:8081/api/ride-request/driver?email=${email}`,
+        );
+
+        const requests = await response.json();
+
+        const container = document.getElementById("requestList");
+        container.innerHTML = "";
+
+        // Empty state
+        if (requests.length === 0) {
+          container.innerHTML = `
+            <div class="empty">
+                <h3>No pending requests 🚗</h3>
+            </div>
+        `;
+          return;
+        }
+
+        // Render cards
+        requests.forEach((r) => {
+          container.innerHTML += `
+            <div class="card">
+                <h3>${r.source} → ${r.destination}</h3>
+
+                <p><b>Date:</b> ${r.rideDate}</p>
+                <p><b>Time:</b> ${r.rideTime}</p>
+
+                <hr>
+
+                <p><b>Passenger Email:</b> ${r.passengerEmail}</p>
+
+                <button class="btn approve" onclick="approve(${r.requestId})">
+                    Approve
+                </button>
+
+                <button class="btn reject" onclick="reject(${r.requestId})">
+                    Reject
+                </button>
+            </div>
+        `;
+        });
+      }
+
+      // Approve
+      async function approve(id) {
+        await fetch(`http://localhost:8081/api/ride-request/${id}/approve`, {
+          method: "PUT",
+        });
+
+        alert("Request Approved ✅");
+        loadRequests();
+      }
+
+      // Reject
+      async function reject(id) {
+        await fetch(`http://localhost:8081/api/ride-request/${id}/reject`, {
+          method: "PUT",
+        });
+
+        alert("Request Rejected ❌");
+        loadRequests();
+      }
+
+      // Back button
+      function goBack() {
+        window.location.href = "dashboard.html";
+      }
+
+      // Load on start
+      loadRequests();
+    </script>
+  </body>
+</html>

@@ -61,6 +61,44 @@ public class RideRequestService {
 
         return list;
     }
+    
+    public List<RideRequestDTO> getDriverRequests(String driverEmail) {
+
+        List<Ride> rides = rideRepository.findByDriverEmail(driverEmail);
+
+        List<RideRequestDTO> list = new ArrayList<>();
+
+        for (Ride ride : rides) {
+
+            List<RideRequest> requests =
+                    rideRequestRepository.findByRideIdAndStatus(ride.getId(), "PENDING");
+
+            for (RideRequest req : requests) {
+
+                User passenger = userRepository.findByEmail(req.getPassengerEmail()).get();
+
+                RideRequestDTO dto = new RideRequestDTO();
+
+                dto.setRideId(ride.getId());
+                dto.setSource(ride.getSource());
+                dto.setDestination(ride.getDestination());
+                dto.setRideDate(ride.getRideDate());
+                dto.setRideTime(ride.getRideTime());
+                dto.setVehicleNumber(ride.getVehicleNumber());
+
+                dto.setDriverName(driverEmail);
+                dto.setPassengerEmail(passenger.getEmail());
+                dto.setDriverMobile(passenger.getPhone());
+
+                dto.setStatus(req.getStatus());
+                dto.setRequestId(req.getId()); // IMPORTANT for approve/reject
+
+                list.add(dto);
+            }
+        }
+
+        return list;
+    }
 
     // Approve Request
     public RideRequest approveRequest(Long id) {

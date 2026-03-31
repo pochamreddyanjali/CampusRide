@@ -172,6 +172,11 @@
           method: "PUT",
         },
       );
+      const text = await response.text();
+      if (!response.ok) {
+        alert("Approval Failed: " + text);
+        return;
+      }
       loadVehicles();
     }
 

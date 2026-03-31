@@ -26,6 +26,11 @@ public class RideRequestController {
     public List<RideRequestDTO> getPassengerRequests(@RequestParam String email) {
         return rideRequestService.getPassengerRequests(email);
     }
+    
+    @GetMapping("/driver")
+    public List<RideRequestDTO> getDriverRequests(@RequestParam String email) {
+        return rideRequestService.getDriverRequests(email);
+    }
 
     @PutMapping("/{id}/approve")
     public RideRequest approve(@PathVariable Long id) {
