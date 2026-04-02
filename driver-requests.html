@@ -9,7 +9,7 @@
         box-sizing: border-box;
         font-family: "Segoe UI", Arial, sans-serif;
       }
-      
+
       body {
         margin: 0;
         font-family: "Segoe UI", Arial, sans-serif;
@@ -162,6 +162,12 @@
       // Auth check
       if (!email) {
         alert("Login required");
+        window.location.href = "login.html";
+      }
+
+      function logout() {
+        localStorage.clear();
+
         window.location.href = "login.html";
       }
 
